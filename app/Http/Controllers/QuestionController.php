@@ -20,9 +20,9 @@ class QuestionController extends Controller
 {
     public function index()
     {
-//        if (! auth()->user()->hasRole('admin')) {
-//            abort(403);
-//        }
+        if (! auth()->user()->hasRole('admin')) {
+            abort(403);
+        }
         return Inertia::render('Questions/Index', [
             'questions' => Question::with(['lesson.subject', 'lesson.grade', 'type'])->get(),
         ]);
