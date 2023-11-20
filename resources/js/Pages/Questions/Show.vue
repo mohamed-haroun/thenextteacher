@@ -223,6 +223,16 @@ let dialog = ref(false)
                 <div v-else class="mt-5 bg-blue-100 dark:bg-blue-500 p-3 overflow-hidden">
                     {{ question.answer.title }}
                 </div>
+
+                <div
+                    v-if="question.image"
+                    class="mt-12">
+                    <h3>Question Image:</h3>
+
+                    <img
+                        class="w-80"
+                        :src="'/questions/' + question.image" alt="question Image">
+                </div>
             </div>
         </div>
     </div>

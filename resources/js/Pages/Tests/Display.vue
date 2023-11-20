@@ -208,51 +208,65 @@ defineProps({
                     <li
                         v-for="(question, i) in questionsOfType(test.questions, rule)"
                         :key="question.id"
-                        class="mt-4 mx-3 flex justify-start gap-2 text-lg"
+                        class="mt-4 mx-3 flex justify-start items-center gap-2 text-lg"
                     >
                         <div>
                             ({{ i + 1 }})
                         </div>
 
                         <!-- for mcq questions-->
-                        <div
-                            v-if="question.type.title === 'mcq'"
-                            class="w-full flex flex-col justify-center">
-                            <div class="text-lg">
-                                <math-jax
-                                    v-if=" test.subject.title === 'Math' && !!equation(question.title)"
-                                    class="flex items-start font-sans"
-                                    :latex="question.title.replaceAll(`\'`, ` `)"
-                                />
-                                <span class="flex" v-else>{{ question.title }}</span>
-                            </div>
-
+                        <div :class="{'grid grid-cols-4': question.image}">
                             <div
-                                class="mt-2 text-lg gap-3 grid"
-                                :class="[containLongChoices(question.choices) ? 'grid-cols-2': 'grid-cols-4']"
+                                v-if="question.type.title === 'mcq'"
+                                class="w-full flex flex-col justify-center"
+                                :class="{'col-span-3': question.image}"
                             >
+                                <div class="text-lg"
+                                     :class="{'flex': question.image}"
+                                >
+                                    <math-jax
+                                        v-if=" test.subject.title === 'Math' && !!equation(question.title)"
+                                        class="flex items-start font-sans"
+                                        :latex="question.title.replaceAll(`\'`, ` `)"
+                                    />
+                                    <span class="flex" v-else>{{ question.title }}</span>
 
-                                <p class="font-medium flex items-center space-x-1 w-fit"
-                                   v-for="(choice, index) in shuffledArray(question.choices)"
-                                   :key="choice.id">
+                                </div>
+
+                                <div
+                                    class="mt-2 text-lg gap-3 grid"
+                                    :class="[containLongChoices(question.choices) ? 'grid-cols-2': 'grid-cols-4']"
+                                >
+
+                                    <p class="font-medium flex items-center space-x-1 w-fit"
+                                       v-for="(choice, index) in shuffledArray(question.choices)"
+                                       :key="choice.id">
 
                                         <span class="w-5 h-8 text-center rounded-2xl ">
                                             {{ String.fromCharCode(index + 97) }}.
                                         </span>
 
-                                    <math-jax
-                                        class="font-light w-fit"
-                                        v-if=" test.subject.title === 'Math' && !!equation(choice.answer)"
-                                        :latex="choice.answer.replaceAll(`\'`, ` `)"
-                                    ></math-jax>
+                                        <math-jax
+                                            class="font-light w-fit"
+                                            v-if=" test.subject.title === 'Math' && !!equation(choice.answer)"
+                                            :latex="choice.answer.replaceAll(`\'`, ` `)"
+                                        ></math-jax>
 
-                                    <span v-else class="ms-3">
+                                        <span v-else class="ms-3">
                                             {{ choice.answer }}
                                     </span>
 
-                                </p>
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                <img
+                                    class="w-80"
+                                    v-if="question.image"
+                                    :src="'/questions/' + question.image" alt="">
                             </div>
                         </div>
+
 
                         <!-- for check questions-->
                         <div
